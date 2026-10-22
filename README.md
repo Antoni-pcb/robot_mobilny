@@ -86,13 +86,17 @@ stateDiagram-v2
 ## Struktura projektu
 
 ```
-robot_mobilny/
-├── src/            # kod źródłowy
-├── include/        # nagłówki
-├── lib/            # biblioteki lokalne
-└── platformio.ini  # konfiguracja PlatformIO
+line_follower/
+├── include/          # pliki nagłówkowe projektu
+├── lib/
+│   ├── hall_sensor/  # biblioteka obsługi czujnika Halla
+│   └── servo/        # biblioteka obsługi serw
+├── src/
+│   └── main.cpp      # główny program: maszyna stanów, PID, obsługa stron
+├── test/             # testy (PlatformIO)
+├── .gitignore
+└── platformio.ini    # konfiguracja PlatformIO (płytka, zależności)
 ```
-<!-- TODO: dopasuj do prawdziwej struktury repo -->
 
 ## Budowanie i wgrywanie
 
