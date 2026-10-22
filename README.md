@@ -50,7 +50,7 @@ Struktura `Side` zawiera m.in.:
 | pin czujnika Halla | czujnik po danej stronie robota |
 | sygnał do multipleksera | wybiera zestaw czujników QTR tej strony |
 | lista kierunków silników | ustala kierunek obrotu napędów dla jazdy w tę stronę |
-| TODO | pozostałe pola |
+| prawy i lewy czujnik QTR  | wskaźniki na klasy z zapisaną kalibracją |
 
 <!-- TODO: wklej definicję struct Side i uzupełnij tabelę dokładnymi nazwami pól -->
 
@@ -103,6 +103,47 @@ pio run              # kompilacja
 pio run -t upload    # wgranie na ESP32
 pio device monitor   # podgląd portu szeregowego
 ```
+
+## Debugowanie
+
+W pętli głównej jest zakomentowany fragment, który wysyła po porcie szeregowym podgląd stanu robota. Żeby go użyć, odkomentuj go i otwórz monitor portu (`pio device monitor`).
+
+```cpp
+serial_message <<
+  ToString(current_state) << " : " <<
+  current_side->id << " : " <<
+  current_side->hall->get_magnet_active() << " : " <<
+  pid_input << " : " <<
+  pid_output << " : " <<
+  control_output << " : " <<
+  current_side->right_qtr->readLineBlack(SensorValues) << " : " <<
+  current_side->left_qtr->readLineBlack(SensorValues);
+
+Serial.println(serial_message.str().c_str());
+serial_message.str("");
+serial_message.clear();
+```
+
+Każda linia ma postać pól rozdzielonych znakiem `:`, w tej kolejności:
+
+| Nr | Pole | Opis |
+|---|---|---|
+| 1 | `current_state` | aktualny stan: `DOCKED`, `RUNNING` lub `WAITING` |
+| 2 | `current_side->id` | aktywna strona: `front` lub `back` |
+| 3 | `get_magnet_active()` | czy czujnik Halla tej strony wykrywa pole magnetyczne |
+| 4 | `pid_input` | wejście regulatora PID |
+| 5 | `pid_output` | wyjście regulatora PID |
+| 6 | `control_output` | końcowy sygnał sterujący |
+| 7 | `right_qtr->readLineBlack()` | położenie linii wg prawego zestawu czujników |
+| 8 | `left_qtr->readLineBlack()` | położenie linii wg lewego zestawu czujników |
+
+Przykładowa linia:
+
+```
+RUNNING : front : 0 : ... : ... : ... : ... : ...
+```
+
+> **Uwaga:** funkcje `readLineBlack()` w tym fragmencie wykonują dodatkowy odczyt czujników QTR RC, który trwa dłużej niż zwykły cykl pętli. Włączone logowanie może więc zmienić zachowanie robota, a wysyłanie danych po `Serial` też zajmuje czas. Do jazdy „na czysto” fragment należy zakomentować z powrotem.
 
 ## Autor
 
