@@ -14,6 +14,8 @@ Robot magazynowy jeżdżący po linii w obu kierunkach, z niezależnym skrętem 
 - [Scenariusz działania](#scenariusz-działania)
 - [Struktura projektu](#struktura-projektu)
 - [Budowanie i wgrywanie](#budowanie-i-wgrywanie)
+- [Debugowanie](#debugowanie)
+- [Zależności](#zależności)
 
 ## Sprzęt
 
@@ -35,7 +37,7 @@ Każde z czterech kół ma własną parę serw: jedno ustawia kąt skrętu, drug
 
 ## Sterowanie
 
-Położenie linii wyznacza biblioteka producenta czujników (Pololu QTRSensors), a na jego podstawie regulator **PID** wylicza sterowanie. Kąt skrętu kół jest ograniczony do **±45°**, a prędkość maleje w trakcie skręcania.
+Położenie linii wyznacza biblioteka Pololu QTRSensors, a na jego podstawie regulator **PID** (biblioteka Arduino-PID-Library) wylicza sterowanie. Kąt skrętu kół jest ograniczony do **±45°**, a prędkość maleje w trakcie skręcania.
 
 Czujniki są kalibrowane po włączeniu zasilania, w funkcji `setup()`.
 
@@ -144,6 +146,23 @@ RUNNING : front : 0 : ... : ... : ... : ... : ...
 ```
 
 > **Uwaga:** funkcje `readLineBlack()` w tym fragmencie wykonują dodatkowy odczyt czujników QTR RC, który trwa dłużej niż zwykły cykl pętli. Włączone logowanie może więc zmienić zachowanie robota, a wysyłanie danych po `Serial` też zajmuje czas. Do jazdy „na czysto” fragment należy zakomentować z powrotem.
+
+## Zależności
+
+Biblioteki są pobierane automatycznie przez PlatformIO na podstawie wpisu `lib_deps` w `platformio.ini`:
+
+```ini
+lib_deps =
+    pololu/QTRSensors
+    pololu/XYZrobotServo
+    https://github.com/br3ttb/Arduino-PID-Library.git
+```
+
+| Biblioteka | Zastosowanie |
+|---|---|
+| [QTRSensors](https://github.com/pololu/qtr-sensors-arduino) | obsługa czujników QTR RC, kalibracja i wyznaczanie położenia linii (`readLineBlack()`) |
+| [XYZrobotServo](https://github.com/pololu/xyzrobot-servo-arduino) | komunikacja z serwami XYZrobot (kąt skrętu i prędkość) |
+| [Arduino-PID-Library](https://github.com/br3ttb/Arduino-PID-Library) | regulator PID |
 
 ## Autor
 
