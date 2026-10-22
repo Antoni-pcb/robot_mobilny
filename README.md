@@ -23,7 +23,7 @@ Robot magazynowy jeżdżący po linii w obu kierunkach, z niezależnym skrętem 
 |---|---|---|
 | ESP32 | 1 | mikrokontroler |
 | Pololu QTR RC (czujniki odbiciowe IR) | 12 (6 z przodu, 6 z tyłu) | wykrywanie linii |
-| Multiplekser 6-kanałowy | 1 | przełączanie między zestawem przednim i tylnym czujników QTR |
+| Multiplekser 6-kanałowy TS3A27518E | 1 | przełączanie między zestawem przednim i tylnym czujników QTR |
 | Czujnik Halla | 2 (1 z przodu, 1 z tyłu) | wykrywanie impulsów magnetycznych ze stacji dokujących |
 | Serwo XYZrobot | 8 | 4 sterują kątem skrętu kół, 4 prędkością obrotową |
 
