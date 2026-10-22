@@ -16,7 +16,7 @@
 #define BL_SPEED_SERVO_ID 4
 #define BR_SPEED_SERVO_ID 8
 
-#define BASE_SPEED 600
+#define BASE_SPEED 800
 #define MOTOR_ANGLE_RES 0.323 
 
 enum State{DOCKED, RUNNING, WAITING};
@@ -79,7 +79,7 @@ ServoBase* all_servo[8] = {
   &br_angle_servo, &br_speed_servo
 };
 
-const uint32_t motor_update_period = 50;
+const uint32_t motor_update_period = 25;
 uint32_t last_motor_control = 0;
 
 void update_servo(Type type, int16_t val){
@@ -96,7 +96,7 @@ void update_servo(Type type, int16_t val){
 int16_t control_output;
 double pid_input, pid_output;
 double pid_setpoint = 0;
-double Kp = 0.0225, Ki = 0.002, Kd = 0.005;
+double Kp = 0.025, Ki = 0.000, Kd = 0.003;
 
 PID mainPID(&pid_input, &pid_output, &pid_setpoint, Kp, Ki, Kd, DIRECT);
 
@@ -157,6 +157,7 @@ back_hall_sensor.update();
 switch(current_state){
 case DOCKED:
   update_servo(Type::Speed, 0);
+  update_servo(Type::Angle, 0);
   if(front_hall_sensor.detect_pulse()){
     current_side = &back_side;
     current_state = RUNNING;
@@ -180,7 +181,7 @@ case RUNNING:
   if(now - last_motor_control >= motor_update_period){
     control_output = (int16_t)lroundf(pid_output / MOTOR_ANGLE_RES);
     update_servo(Type::Angle, control_output);
-    update_servo(Type::Speed, BASE_SPEED);
+    update_servo(Type::Speed, BASE_SPEED - 3 * pid_output);
     last_motor_control = now;
   }
   break;
