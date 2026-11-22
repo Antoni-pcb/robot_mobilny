@@ -1,17 +1,22 @@
 #include "hall_sensor.h"
 
 void HallSensor::set_pin(int pin){
-    sensor_pin = pin;
-    pinMode(pin, INPUT);
+    sensor_pin_ = pin;
+    pinMode(pin, INPUT_PULLUP);
 }
 
 void HallSensor::update(){
-    prev_state = magnet_active;
-    magnet_active = !digitalRead(sensor_pin);
+    if(micros() - last_update_ >= treshold_){
+        prev_state_ = magnet_active_;
+        magnet_active_ = !digitalRead(sensor_pin_);
+        last_update_ = micros();
+    }
+    
 }
 
 bool HallSensor::detect_pulse(){
-    if(prev_state == true and !magnet_active){
+    this->update();
+    if(prev_state_ == true and !magnet_active_){
         return true;
     }
     return false;
