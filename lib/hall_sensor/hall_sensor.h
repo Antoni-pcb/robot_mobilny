@@ -11,7 +11,7 @@ private:
     uint32_t last_update_;
     uint32_t treshold_;
 public:
-    HallSensor(): sensor_pin_{}, prev_state_{}, magnet_active_{}, treshold_{} { last_update_ = micros(); }
+    HallSensor(): sensor_pin_{}, prev_state_{}, magnet_active_{}, treshold_{} { last_update_ = millis(); }
     void set_treshold(uint32_t treshold){ treshold_ = treshold; }
     void set_pin(int pin);
     bool get_magnet_active(){ return magnet_active_; }

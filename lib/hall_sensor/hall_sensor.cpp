@@ -6,10 +6,10 @@ void HallSensor::set_pin(int pin){
 }
 
 void HallSensor::update(){
-    if(micros() - last_update_ >= treshold_){
+    if(millis() - last_update_ >= treshold_){
         prev_state_ = magnet_active_;
         magnet_active_ = !digitalRead(sensor_pin_);
-        last_update_ = micros();
+        last_update_ = millis();
     }
     
 }
