@@ -108,7 +108,9 @@ void setup() {
 
   //setup czujników halla
   front_hall_sensor.set_pin(22);
+  front_hall_sensor.set_treshold(50);
   back_hall_sensor.set_pin(23);
+  back_hall_sensor.set_treshold(50);
 
   //setup i kalibracja czujników QTR
   pinMode(qtr_ctrl_pin, OUTPUT);
@@ -150,9 +152,6 @@ std::ostringstream serial_message;
 
 void loop() {
 uint32_t now = millis();
-front_hall_sensor.update();
-back_hall_sensor.update();
-
 
 switch(current_state){
 case DOCKED:
