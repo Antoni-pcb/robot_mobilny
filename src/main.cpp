@@ -16,7 +16,7 @@
 #define BL_SPEED_SERVO_ID 4
 #define BR_SPEED_SERVO_ID 8
 
-#define BASE_SPEED 800
+#define BASE_SPEED 650
 #define MOTOR_ANGLE_RES 0.323 
 
 enum State{DOCKED, RUNNING, WAITING};
